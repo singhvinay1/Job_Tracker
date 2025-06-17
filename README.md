@@ -84,4 +84,4 @@ This will start both the frontend (port 3000) and backend (port 5000) servers.
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License.
