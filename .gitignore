@@ -1,0 +1,4 @@
+node_module/
+frontend/node_module/
+backend/node_module/
+node_modules
