@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../config/axios';
 import {
   Container,
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
   const [sortOrder, setSortOrder] = useState('desc');
   const { socket } = useNotifications();
 
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
       const response = await api.get('/api/jobs/admin/all', {
         params: {
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Error fetching jobs:', error);
     }
-  };
+  }, [statusFilter, sortOrder]);
 
   useEffect(() => {
     fetchJobs();
