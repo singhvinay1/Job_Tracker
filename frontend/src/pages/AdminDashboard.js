@@ -40,7 +40,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchJobs();
-  }, [statusFilter, sortOrder]);
+  }, [statusFilter, sortOrder, fetchJobs]);
 
   useEffect(() => {
     if (socket) {
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
         socket.off('notification');
       };
     }
-  }, [socket]);
+  }, [socket, fetchJobs]);
 
   const fetchJobs = async () => {
     try {

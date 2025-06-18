@@ -44,7 +44,7 @@ function Layout() {
     // Test backend connection
     const testConnection = async () => {
       try {
-        const response = await api.get('/api/jobs');
+        await api.get('/api/jobs');
         setConnectionStatus({
           open: true,
           message: 'Successfully connected to backend!',

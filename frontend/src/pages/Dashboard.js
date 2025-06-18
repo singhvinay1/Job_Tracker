@@ -22,13 +22,11 @@ import {
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import api from '../config/axios';
-import { useNotifications } from '../contexts/NotificationContext'; // Import useNotifications
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { username } = useParams(); // Get username from URL
   const location = useLocation(); // Get location object for state
-  const { socket } = useNotifications(); // Get socket from notification context
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,21 +47,7 @@ const Dashboard = () => {
       navigate(location.pathname, { replace: true, state: {} });
       console.log('Refresh state cleared.'); // Debug log
     }
-  }, [location.state?.refresh, username]); // Add username to dependencies
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('notification', (notification) => {
-        console.log('Received real-time notification:', notification);
-        // Re-fetch jobs when a notification is received
-        fetchJobs();
-      });
-
-      return () => {
-        socket.off('notification');
-      };
-    }
-  }, [socket]); // Depend on socket
+  }, [location.pathname, location.state, navigate, fetchJobs]);
 
   const fetchJobs = async () => {
     try {
