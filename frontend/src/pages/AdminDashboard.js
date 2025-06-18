@@ -38,6 +38,21 @@ const AdminDashboard = () => {
   const [sortOrder, setSortOrder] = useState('desc');
   const { socket } = useNotifications();
 
+  const fetchJobs = async () => {
+    try {
+      const response = await api.get('/api/jobs/admin/all', {
+        params: {
+          status: statusFilter || undefined,
+          sortBy: 'appliedDate',
+          sortOrder
+        }
+      });
+      setJobs(response.data);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    }
+  };
+
   useEffect(() => {
     fetchJobs();
   }, [statusFilter, sortOrder, fetchJobs]);
@@ -54,21 +69,6 @@ const AdminDashboard = () => {
       };
     }
   }, [socket, fetchJobs]);
-
-  const fetchJobs = async () => {
-    try {
-      const response = await api.get('/api/jobs/admin/all', {
-        params: {
-          status: statusFilter || undefined,
-          sortBy: 'appliedDate',
-          sortOrder
-        }
-      });
-      setJobs(response.data);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-    }
-  };
 
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc');
