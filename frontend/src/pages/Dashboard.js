@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import api from '../config/axios';
+import { useNotifications } from '../contexts/NotificationContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const Dashboard = () => {
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
+  const { socket } = useNotifications();
 
   const fetchJobs = useCallback(async () => {
     try {
@@ -60,6 +62,16 @@ const Dashboard = () => {
       console.log('Refresh state cleared.'); // Debug log
     }
   }, [location.pathname, location.state, navigate, fetchJobs]);
+
+  useEffect(() => {
+    if (socket) {
+      const handleNotification = (notification) => {
+        fetchJobs();
+      };
+      socket.on('notification', handleNotification);
+      return () => socket.off('notification', handleNotification);
+    }
+  }, [socket, fetchJobs]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this job application?')) {
